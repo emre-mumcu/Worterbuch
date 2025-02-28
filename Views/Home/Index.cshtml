@@ -1,0 +1,119 @@
+﻿@model WordEntityVM
+
+<a href="/"><i class="fa-solid fa-plus p-2 m-2 my-4 shadow"></i></a>
+<a href="/List"><i class="fa-solid fa-list p-2 m-2 my-4 shadow"></i></a>
+
+<form method="post" action="/Save" class="col-sm-8 offset-sm-2">
+
+	<h1 class="my-4">@(Model.Id > 0 ? "Update" : "Insert")</h1>
+<hr>
+	<input asp-for="Id" type="hidden" />
+
+	<div class="row my-2">
+		<label asp-for="Word" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-4">
+			<input asp-for="Word" class="form-control">
+		</div>
+		<label asp-for="Type" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-4">
+			<select asp-for="Type" asp-items="Model.TypeOptions" class="form-control"
+				onchange="onTypeChanged(this.value)">
+				<option value="-1">Select</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row my-2">
+		<label asp-for="Pronunciation" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-10">
+			<input asp-for="Pronunciation" class="form-control">
+		</div>
+	</div>
+
+	<div class="row my-2 noun">
+		<label asp-for="Gender" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-4">
+			<input asp-for="Gender" class="form-control">
+		</div>
+		<label asp-for="Plural" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-4">
+			<input asp-for="Plural" class="form-control">
+		</div>
+	</div>
+
+	<div class="row my-2 verb">
+		<label asp-for="VerbConjugation" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-10">
+			<textarea asp-for="VerbConjugation" class="form-control"></textarea>
+		</div>
+	</div>
+
+	<div class="row my-2">
+		<label asp-for="English" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-10">
+			<textarea asp-for="English" class="form-control"></textarea>
+		</div>
+	</div>
+
+	<div class="row my-2">
+		<label asp-for="Turkish" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-10">
+			<textarea asp-for="Turkish" class="form-control"></textarea>
+		</div>
+	</div>
+
+	<div class="row my-2">
+		<label asp-for="Sample" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-10">
+			<textarea asp-for="Sample" class="form-control"></textarea>
+		</div>
+	</div>
+
+	<div class="row my-2">
+		<label asp-for="Detail" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-10">
+			<textarea asp-for="Detail" class="form-control"></textarea>
+		</div>
+	</div>
+
+	<div class="row my-2">
+		<label class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-10">
+			<button type="submit" class="btn btn-@(Model.Id > 0 ? "warning" : "success")">@(Model.Id > 0 ? "Update" :
+				"Insert")</ button >
+		</div>
+	</div>
+
+</form>
+
+
+
+
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		var elements = document.querySelectorAll('.noun, .verb');
+		elements.forEach(function (element) {
+			element.style.display = "none";
+		});
+	});
+
+	function onTypeChanged(val) {
+		var elements = document.querySelectorAll('.noun, .verb');
+		var nounElements = document.querySelectorAll('.noun');
+		var verbElements = document.querySelectorAll('.verb');
+
+		if (val == 'Noun') {
+			nounElements.forEach(function (element) { element.style.display = ""; });
+			verbElements.forEach(function (element) { element.style.display = "none"; });
+		}
+		else if (val == 'Verb') {
+			nounElements.forEach(function (element) { element.style.display = "none"; });
+			verbElements.forEach(function (element) { element.style.display = ""; });
+		}
+		else {
+			elements.forEach(function (element) { element.style.display = "none"; });
+		}
+	}
+</script>

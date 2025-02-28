@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Wörterbuch.AppData.Entities.WordEntity>?
+
+<a href="/"><i class="fa-solid fa-plus p-2 m-2 my-4 shadow"></i></a>
+
+<hr>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Word</th>
+			<th>Conj.</th>
+			<th>Type</th>
+			<th>Pron.</th>
+			<th>Plural</th>
+			<th>Gender</th>
+			<th>English</th>
+			<th>Turkish</th>
+			<th>Sample</th>
+			<th>Detail</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var i in Model ?? Enumerable.Empty<Wörterbuch.AppData.Entities.WordEntity>())
+		{
+			<tr>
+				<td><a href="/Edit/@i.Id">@i.Word</a></td>
+				<td>
+					@if (!string.IsNullOrEmpty(i.VerbConjugation))
+					{
+						<button type="button" class="btn btn-sm btn-warning" data-bs-toggle="popover"
+							data-bs-title="Conj.: @i.Word" data-bs-placement="left" data-bs-html="true"
+							data-bs-content="<pre>@i.VerbConjugation</pre>"><i class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					}
+					else
+					{
+						<button type="button" disabled class="btn btn-sm btn-secondary"><i
+								class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					}
+				</td>
+				<td>@i.Type</td>
+				<td>@i.Pronunciation</td>
+				<td>@i.Plural</td>
+				<td>@i.Gender</td>
+				<td>@i.English</td>
+				<td>@i.Turkish</td>
+				<td>
+					@if (!string.IsNullOrEmpty(i.Sample))
+					{
+						<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="popover"
+							data-bs-title="Sample: @i.Word" data-bs-placement="left" data-bs-content="@i.Sample"><i
+								class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					}
+					else
+					{
+						<button type="button" disabled class="btn btn-sm btn-secondary"><i
+								class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					}
+				</td>
+				<td>
+					@if (!string.IsNullOrEmpty(i.Detail))
+					{
+						<button type="button" class="btn btn-sm btn-success" data-bs-toggle="popover"
+							data-bs-title="Detail: @i.Word" data-bs-placement="left" data-bs-content="@i.Detail"><i
+								class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					}
+					else
+					{
+						<button type="button" disabled class="btn btn-sm btn-secondary"><i
+								class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<script>
+	var popoverList;
+
+	document.addEventListener("DOMContentLoaded", function () {
+		var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+		popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+			return new bootstrap.Popover(popoverTriggerEl);
+		});
+	});
+
+	document.addEventListener("show.bs.popover", function (event) {
+		popoverList.forEach(function (popover) {
+			if (popover._element !== event.target) {
+				popover.hide();
+			}
+		});
+	});
+</script>
