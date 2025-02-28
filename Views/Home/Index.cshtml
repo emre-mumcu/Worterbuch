@@ -12,7 +12,7 @@
 	<div class="row my-2">
 		<label asp-for="Word" class="col-sm-2 col-form-label"></label>
 		<div class="col-sm-4">
-			<input asp-for="Word" class="form-control">
+			<input asp-for="Word" class="form-control" disabled=@(Model.Id > 0 ? "disabled" : null)>
 		</div>
 		<div class="col-sm-1">
 			<a href="#" onclick="lookup();"><i class="fa-solid fa-magnifying-glass p-2 shadow rounded-4"></i></a>
@@ -137,10 +137,8 @@
 				if (!response.ok) { throw new Error("Network response was not ok"); }
 				return response.json();
 			})
-			.then(data => {
-				console.log(data);
-				console.log(JSON.stringify(data));
-				if(data.found="true")
+			.then(data => {				
+				if(data.found)
 				{
 					window.location.replace(data.link);
 				}				
