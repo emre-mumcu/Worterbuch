@@ -6,7 +6,7 @@
 <form method="post" action="/Save" class="col-sm-8 offset-sm-2">
 
 	<h1 class="my-4">@(Model.Id > 0 ? "Update" : "Insert")</h1>
-<hr>
+	<hr>
 	<input asp-for="Id" type="hidden" />
 
 	<div class="row my-2">
@@ -14,7 +14,10 @@
 		<div class="col-sm-4">
 			<input asp-for="Word" class="form-control">
 		</div>
-		<label asp-for="Type" class="col-sm-2 col-form-label"></label>
+		<div class="col-sm-1">
+			<a href="#" onclick="lookup();"><i class="fa-solid fa-magnifying-glass p-2 shadow rounded-4"></i></a>
+		</div>
+		<label asp-for="Type" class="col-sm-1 col-form-label"></label>
 		<div class="col-sm-4">
 			<select asp-for="Type" asp-items="Model.TypeOptions" class="form-control"
 				onchange="onTypeChanged(this.value)">
@@ -83,7 +86,7 @@
 				"Insert")</ button >
 		</div>
 	</div>
-
+	@Html.AntiForgeryToken()
 </form>
 
 
@@ -115,5 +118,35 @@
 		else {
 			elements.forEach(function (element) { element.style.display = "none"; });
 		}
+	}
+
+	function lookup() {
+
+		const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+		const requestData = {
+			word: document.querySelector('input[name="Word"]').value
+		};
+
+		fetch('/Lookup', {
+			method: "POST",
+			headers: { "Content-Type": "application/json", "RequestVerificationToken": token },
+			body: JSON.stringify(requestData)
+		})
+			.then(response => {
+				if (!response.ok) { throw new Error("Network response was not ok"); }
+				return response.json();
+			})
+			.then(data => {
+				console.log(data);
+				console.log(JSON.stringify(data));
+				if(data.found="true")
+				{
+					window.location.replace(data.link);
+				}				
+			})
+			.catch(error => {
+				console.error("Error:", error);
+			});
 	}
 </script>
